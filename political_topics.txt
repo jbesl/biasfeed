@@ -1,0 +1,22 @@
+# Political topic buckets.  A story counts as political if its text matches any
+# keyword from an ENABLED bucket.
+#
+# Format per line:   tier | bucket-name | comma, separated, keywords
+#   tier = core   -> always on (hard politics/government)
+#   tier = loose  -> on only when POLITICAL_SCOPE = "loose" in groundclone.py (the default)
+#
+# Edit freely: add keywords, add buckets, or move a bucket between core/loose.
+# Matching is whole-word and case-insensitive, so "vote" won't match "devote".
+# Lines beginning with # are ignored.
+
+core  | government   | president, white house, congress, senate, house republicans, house democrats, lawmakers, supreme court, federal judge, governor, legislation, capitol, administration, executive order, impeachment, filibuster, shutdown, pentagon, state department, attorney general
+core  | elections    | election, ballot, voter, primary, campaign, candidate, runoff, midterm, electoral, polling
+core  | parties      | democrat, democrats, republican, republicans, gop, bipartisan, left-wing, right-wing, progressive, conservative
+core  | policy       | tariff, sanctions, federal budget, debt ceiling, tax bill, healthcare law, foreign policy, national security, federal court, lawsuit against, sues
+
+loose | immigration  | immigration, border patrol, deportation, migrant, asylum, refugee, customs enforcement
+loose | guns         | gun control, firearm, mass shooting, second amendment, assault weapon
+loose | abortion     | abortion, roe v wade, pro-life, pro-choice, reproductive rights
+loose | climate      | climate policy, emissions, fossil fuel, green energy, environmental regulation
+loose | social       | transgender, lgbtq, dei, critical race, book ban, censorship, affirmative action
+loose | protest      | protest, riot, curfew, national guard, civil rights, demonstrators

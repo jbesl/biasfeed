@@ -1,0 +1,35 @@
+name,feed_url,bias,factuality
+# bias: one of left, lean-left, center, lean-right, right  (collapsed to L/C/R for the bar)
+# factuality: one of high, mixed, low
+# These leans reflect the publicly documented consensus of AllSides / Ad Fontes / Media Bias-Fact Check.
+# Edit freely: add/remove rows, fix a feed URL, or change a rating you disagree with.
+# Lines beginning with # are ignored.
+NPR,https://feeds.npr.org/1001/rss.xml,lean-left,high
+The Guardian US,https://www.theguardian.com/us-news/rss,lean-left,high
+The New York Times,https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml,lean-left,high
+The Washington Post,https://feeds.washingtonpost.com/rss/national,lean-left,high
+NBC News,https://feeds.nbcnews.com/nbcnews/public/news,lean-left,high
+Politico,https://www.politico.com/rss/politicopicks.xml,lean-left,high
+Vox,https://www.vox.com/rss/index.xml,left,mixed
+HuffPost,https://www.huffpost.com/section/front-page/feed,left,mixed
+The Atlantic,https://www.theatlantic.com/feed/all/,left,high
+CNN,http://rss.cnn.com/rss/cnn_topstories.rss,left,mixed
+Reuters,https://news.google.com/rss/search?q=site:reuters.com+when:2d&hl=en-US&gl=US&ceid=US:en,center,high
+Associated Press,https://news.google.com/rss/search?q=site:apnews.com+when:2d&hl=en-US&gl=US&ceid=US:en,center,high
+BBC News,https://feeds.bbci.co.uk/news/rss.xml,center,high
+The Hill,https://thehill.com/news/feed/,center,high
+Axios,https://api.axios.com/feed/,center,high
+USA Today,https://news.google.com/rss/search?q=site:usatoday.com+when:2d&hl=en-US&gl=US&ceid=US:en,center,high
+CNBC,https://www.cnbc.com/id/100003114/device/rss/rss.html,center,high
+Christian Science Monitor,https://rss.csmonitor.com/feeds/all,center,high
+Newsweek,https://www.newsweek.com/rss,center,mixed
+Wall Street Journal,https://feeds.a.dj.com/rss/RSSWorldNews.xml,lean-right,high
+Fox News,https://moxie.foxnews.com/google-publisher/latest.xml,right,mixed
+New York Post,https://nypost.com/feed/,lean-right,mixed
+Washington Examiner,https://www.washingtonexaminer.com/feed,lean-right,mixed
+National Review,https://www.nationalreview.com/feed/,right,high
+Washington Times,https://www.washingtontimes.com/rss/headlines/news/,lean-right,mixed
+The Daily Wire,https://www.dailywire.com/feeds/rss.xml,right,mixed
+The Federalist,https://thefederalist.com/feed/,right,mixed
+Newsmax,https://www.newsmax.com/rss/Newsfront/16/,right,mixed
+Breitbart,https://feeds.feedburner.com/breitbart,right,low
