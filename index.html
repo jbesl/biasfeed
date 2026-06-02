@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>BiasFeed · Politics</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"><style>
+  :root { --paper:#f4f1ea; --ink:#1a1714; --muted:#7a736a; --line:#ddd6c9;
+    --L:#2f6db4; --C:#9a9ea6; --R:#c0392b; --card:#fffdf8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans',system-ui,sans-serif; line-height:1.45; }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 24px; }
+  header { padding:36px 0 18px; }
+  .wordmark { font-family:'Fraunces',serif; font-weight:900; font-size:clamp(32px,5.5vw,52px);
+    letter-spacing:-.02em; line-height:.95; }
+  .wordmark span { color:var(--R); }
+  .tagline { font-family:'Fraunces',serif; font-style:italic; color:var(--muted);
+    font-size:17px; margin-top:4px; }
+  .sub { color:var(--muted); margin-top:10px; font-size:13px; }
+  .legend { display:flex; gap:16px; margin-top:12px; font-size:13px; flex-wrap:wrap; }
+  .legend i { width:12px; height:12px; border-radius:2px; display:inline-block;
+    margin-right:6px; vertical-align:-1px; }
+
+  /* Sticky filter bar */
+  .filterbar { position:sticky; top:0; z-index:20; background:var(--paper);
+    border-top:3px solid var(--ink); border-bottom:1px solid var(--line);
+    padding:12px 0; margin-bottom:10px; display:flex; gap:26px; flex-wrap:wrap;
+    overflow-x:auto; }
+  .fgroup { display:flex; align-items:center; gap:7px; }
+  .flabel { font-family:'Fraunces',serif; font-size:12px; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--muted); margin-right:2px; }
+  .fbtn { font-family:inherit; font-size:12.5px; padding:5px 11px; border-radius:20px;
+    border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer;
+    white-space:nowrap; transition:.12s; }
+  .fbtn:hover { border-color:var(--ink); }
+  .fbtn.active { background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  .section-label { font-family:'Fraunces',serif; font-weight:600; font-size:14px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--muted);
+    margin:24px 0 14px; display:flex; align-items:center; gap:10px; }
+  .section-label::after { content:""; flex:1; height:1px; background:var(--line); }
+
+  /* Featured grid: heroes span 3 of 6 cols (2 per row), mids span 2 (3 per row) */
+  #featured { display:grid; grid-template-columns:repeat(6,1fr); gap:18px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:18px; display:flex; flex-direction:column; gap:10px; }
+  .card.hero { grid-column:span 3; }
+  .card.mid  { grid-column:span 2; }
+  .hero .headline { font-size:25px; }
+  .mid .headline { font-size:18px; }
+  .headline { font-family:'Fraunces',serif; font-weight:600; color:var(--ink);
+    text-decoration:none; line-height:1.18; }
+  .headline:hover { text-decoration:underline; }
+  .meta { color:var(--muted); font-size:12.5px; }
+  .tilt { align-self:flex-start; font-size:11px; font-weight:600; letter-spacing:.03em;
+    padding:2px 9px; border-radius:20px; border:1px solid var(--line); color:var(--muted); }
+  .tilt.left { color:var(--L); border-color:#cdddf0; background:#f3f8fd; }
+  .tilt.right { color:var(--R); border-color:#f0cfca; background:#fdf4f3; }
+  .bar { display:flex; height:24px; border-radius:5px; overflow:hidden; margin-top:auto;
+    font-size:11px; font-weight:600; color:#fff; }
+  .bar.mini { height:8px; border-radius:4px; }
+  .seg { display:flex; align-items:center; justify-content:center; min-width:0; }
+  .seg.l { background:var(--L); } .seg.c { background:var(--C); } .seg.r { background:var(--R); }
+  .flag { align-self:flex-start; font-size:10.5px; font-weight:600; letter-spacing:.04em;
+    text-transform:uppercase; padding:4px 9px; border-radius:20px; }
+  .flag.left { background:#e8f0f9; color:var(--L); border:1px solid #bcd4ee; }
+  .flag.right { background:#fbeae8; color:var(--R); border:1px solid #f0c4bd; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { font-size:11px; padding:3px 8px; border-radius:20px; border:1px solid var(--line);
+    background:#fff; color:#5b6068; }
+  .chip.l { color:var(--L); border-color:#cdddf0; }
+  .chip.r { color:var(--R); border-color:#f0cfca; }
+
+  #featempty { display:none; color:var(--muted); font-size:14px; padding:8px 0; }
+
+  /* Compact list */
+  #morelist { border-top:1px solid var(--line); }
+  .row { display:grid; grid-template-columns:1fr 120px 34px; align-items:center; gap:14px;
+    padding:11px 6px; border-bottom:1px solid var(--line); text-decoration:none; color:var(--ink); }
+  .row:hover { background:#fffaf0; }
+  .rowhead { font-size:15px; display:flex; align-items:center; gap:8px; }
+  .rowcount { font-size:12.5px; color:var(--muted); text-align:right; }
+  .dot { width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+  .dot.left { background:var(--L); } .dot.right { background:var(--R); }
+
+  footer { color:var(--muted); font-size:12.5px; border-top:1px solid var(--line);
+    margin-top:40px; padding:24px 0 60px; }
+  @media (max-width:760px) {
+    #featured { grid-template-columns:1fr; }
+    .card.hero, .card.mid { grid-column:span 1; }
+    .row { grid-template-columns:1fr 70px 28px; } .rowbar { display:none; }
+  }
+</style><body><div class="wrap"><header><div class="wordmark">Bias<span>Feed</span></div><div class="tagline">political coverage across the spectrum</div><div class="sub">21 political stories · 11 blindspots · 29 rated outlets · scope: loose · generated 2026-06-02 11:42 UTC</div><div class="legend"><span><i style="background:var(--L)"></i>Left</span><span><i style="background:var(--C)"></i>Center</span><span><i style="background:var(--R)"></i>Right</span></div></header><div class="filterbar"><div class="fgroup"><span class="flabel">Lean</span><button class="fbtn active" data-group="lean" data-val="all">All</button><button class="fbtn" data-group="lean" data-val="left">Leans Left (4)</button><button class="fbtn" data-group="lean" data-val="balanced">Balanced (9)</button><button class="fbtn" data-group="lean" data-val="right">Leans Right (8)</button></div><div class="fgroup"><span class="flabel">Topic</span><button class="fbtn active" data-group="topic" data-val="all">All</button><button class="fbtn" data-group="topic" data-val="protest">Protest (4)</button><button class="fbtn" data-group="topic" data-val="immigration">Immigration (2)</button><button class="fbtn" data-group="topic" data-val="social">Social (2)</button><button class="fbtn" data-group="topic" data-val="abortion">Abortion (1)</button></div><div class="fgroup"><span class="flabel">Sort</span><button class="fbtn active" data-group="sort" data-val="cov">Most covered</button><button class="fbtn" data-group="sort" data-val="lop">Most lopsided</button></div></div><div id="featured"><article class="card featured hero" data-cov="19" data-lop="6" data-tilt="balanced" data-topics="government elections parties policy immigration protest"><span class="tilt balanced">Balanced</span><a class="headline" href="https://news.google.com/rss/articles/CBMiswFBVV95cUxPaHlCX19ldlI1MUVuYjRvb0piZDAxalpDUkEySVVQQ3Y3RVBwbXZqd1gwRU9faXpTc3FxUE5BalpXQjNMcFZkSmRIaE1TVThhZUZWZnk3NlR2MzJuSTlOdWZHTnEzQnpxT05wTkJGZzR2QkpPalBwZHBKR1p0c3NaQTRDdVJBQTJEUDNfLXFrM3NMcW5UaXpGMGRuT29KZERQU3FJSmZqZFBDUDFLWWIzeWhwSQ?oc=5" target="_blank" rel="noopener">Kremlin talks of new &#x27;paradigm&#x27; in Ukraine war, accusing Kyiv of &#x27;acts of terror&#x27; - Reuters</a><div class="meta">19 sources · Jun 02, 11:22 UTC</div><div class="bar"><span class="seg l" style="width:32%">32%</span><span class="seg c" style="width:42%">42%</span><span class="seg r" style="width:26%">26%</span></div><div class="chips"><span class="chip c">Associated Press</span><span class="chip c">Axios</span><span class="chip c">BBC News</span><span class="chip r">Breitbart</span><span class="chip c">CNBC</span><span class="chip c">Christian Science Monitor</span><span class="chip r">Fox News</span><span class="chip l">NBC News</span><span class="chip l">NPR</span><span class="chip r">National Review</span><span class="chip c">Newsweek</span><span class="chip c">Reuters</span><span class="chip l">The Atlantic</span><span class="chip r">The Daily Wire</span><span class="chip l">The Guardian US</span><span class="chip c">The Hill</span><span class="chip l">The New York Times</span><span class="chip l">Vox</span><span class="chip r">Washington Examiner</span></div></article><article class="card featured hero" data-cov="6" data-lop="16" data-tilt="balanced" data-topics="government social"><span class="tilt balanced">Balanced</span><a class="headline" href="https://thehill.com/policy/defense/5905031-defense-secretary-transgender-ban-appeal/" target="_blank" rel="noopener">Hegseth says &#x27;see you at SCOTUS&#x27; after appeals court rules Trump admin illegally banned active transgender troops</a><div class="meta">6 sources · Jun 02, 09:51 UTC</div><div class="bar"><span class="seg l" style="width:33%">33%</span><span class="seg c" style="width:50%">50%</span><span class="seg r" style="width:17%">17%</span></div><div class="chips"><span class="chip c">Associated Press</span><span class="chip r">Breitbart</span><span class="chip l">NPR</span><span class="chip c">Reuters</span><span class="chip l">The Guardian US</span><span class="chip c">The Hill</span></div></article><article class="card featured mid" data-cov="5" data-lop="20" data-tilt="balanced" data-topics="government"><span class="tilt balanced">Balanced</span><a class="headline" href="https://www.axios.com/2026/06/02/60-minutes-nick-bilton-cbs-news" target="_blank" rel="noopener">New &quot;60 Minutes&quot; head faces blowback as staffers rebuke changes</a><div class="meta">5 sources · Jun 02, 08:50 UTC</div><div class="bar"><span class="seg l" style="width:20%">20%</span><span class="seg c" style="width:40%">40%</span><span class="seg r" style="width:40%">40%</span></div><div class="chips"><span class="chip c">Associated Press</span><span class="chip c">Axios</span><span class="chip r">Fox News</span><span class="chip l">NBC News</span><span class="chip r">The Daily Wire</span></div></article></div><div id="featempty">No stories match these filters.</div><div id="morewrap"><div class="section-label">More Coverage</div><div id="morelist"><a class="row" href="https://news.google.com/rss/articles/CBMilAFBVV95cUxOZlJyZEl6emNGQ0pqdU8tT2I3ZkFtZjh2MWV4VFVobDdvT19yT1NOLU80Q1hUVFdJamdBTEtvR0FmUGc1VmVQMXZUNzNxZWE4SUtBQ29UbzV2NlFFNkJ2OVpfdEFzNHRYaDJoQjZMTHdKbHVFVjlXcy1Td2M1Nm1FZHBlekNlQThZRmZrYkM2bmpSS29q?oc=5" target="_blank" rel="noopener" data-cov="4" data-lop="0" data-tilt="balanced" data-topics="government"><span class="rowhead">Teenage barrel racing competitor accused of stabbing horses at Las Vegas event - AP News</span><span class="rowbar"><div class="bar mini"><span class="seg l" style="width:25%"></span><span class="seg c" style="width:50%"></span><span class="seg r" style="width:25%"></span></div></span><span class="rowcount">4</span></a><a class="row" href="https://news.google.com/rss/articles/CBMimwFBVV95cUxQVkxKTDU4XzJOR0tzX0hDOThaTVRsZjloSUxIaEx6b2ZlRFI2V3RFOVg1MVNMM3VraURqaC1FR09YREY4SU5YbGtBNVh5NHNDNW5abGFPR21iVmdMNDVNRzhKNzdUOC1GUlI5NFFzUEpkY1ltdm53UVcydVM1NGtUTDZvbGNmc2s4NnlpOEJFRGV2ZzgxTjd5Vl9mQQ?oc=5" target="_blank" rel="noopener" data-cov="4" data-lop="75" data-tilt="right" data-topics="government immigration protest"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Newark mayor imposes curfew around Delaney Hall after clashes over immigration detention center - AP News</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:25%"></span><span class="seg r" style="width:75%"></span></div></span><span class="rowcount">4</span></a><a class="row" href="https://news.google.com/rss/articles/CBMikgFBVV95cUxOZzJ0NnJmdFlZVWFFZFdSS0NZY1duM1M3STdPYkR3LTFmRktka3RlNE1fTVVndTNaNVZadkNnMFRKdmx6Ykh4SUwweVd0UEJGem9oZDFucHBGd01HYlc1bXRhMWdCT3RZdnB2VVZMaXRaenBoM1BWRzNyVGhSa3ZJUTlSZUZ0Q0MyTEREWW1uN041UQ?oc=5" target="_blank" rel="noopener" data-cov="4" data-lop="75" data-tilt="right" data-topics="government social"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Malaysia bans social media accounts for children under 16 but questions remain - AP News</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:25%"></span><span class="seg r" style="width:75%"></span></div></span><span class="rowcount">4</span></a><a class="row" href="https://news.google.com/rss/articles/CBMijgFBVV95cUxOM1VfYmNmTVpTb19RejQzaFZfMUtJMm53UXYxbVlKQ19Rd3RQcTRPNjRYMi1sdm40ZVJZT2RlUDkwbzdGUmtvWnFRSFRIY24xNGpZYjUtRlVzbWN4UTBOcUplRzRMZ3BZNEE0eXAxSWRkSGdDR000UTI4Mzl5b2xYaXJKai1vbFgyTXV5LWhn?oc=5" target="_blank" rel="noopener" data-cov="3" data-lop="67" data-tilt="left" data-topics="parties"><span class="rowhead"><span class="dot right" title="Blindspot"></span>NYC Mayor Zohran Mamdani skips annual parade celebrating Israel - AP News</span><span class="rowbar"><div class="bar mini"><span class="seg l" style="width:67%"></span><span class="seg c" style="width:33%"></span></div></span><span class="rowcount">3</span></a><a class="row" href="https://www.cnbc.com/2026/06/01/federal-reserve-trump-political-pressure-powell-stress-test.html" target="_blank" rel="noopener" data-cov="3" data-lop="0" data-tilt="balanced" data-topics="government"><span class="rowhead">Fed&#x27;s Powell warns Trump&#x27;s political &#x27;stress test&#x27; will wreck public trust in central bank</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:100%"></span></div></span><span class="rowcount">3</span></a><a class="row" href="https://news.google.com/rss/articles/CBMimAFBVV95cUxNMU1lV21PYU54OEVHeklzWElSQUtLdEJCQWU1RU1zZGNrc0tIRlhQWXJXTW5XNlJGN2ZnMnVrdTYtWDdOMUtzaGE5ZlVVZUZSY2NDa3VmLUEtSGZ1TTRpRF9OVEhMWTB1ckxxMVhzb1RLSGxrbVpRWWhoenA0MEdMQUxtQ085LVdiWTV0RGkxbndWM3hCMjFqRQ?oc=5" target="_blank" rel="noopener" data-cov="3" data-lop="67" data-tilt="right" data-topics="government parties"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Rubio will testify before Congress for the first time since the start of the Iran war - AP News</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:33%"></span><span class="seg r" style="width:67%"></span></div></span><span class="rowcount">3</span></a><a class="row" href="https://www.axios.com/2026/05/31/jill-biden-book-backlash" target="_blank" rel="noopener" data-cov="3" data-lop="67" data-tilt="right" data-topics="government elections parties"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Ex-Biden aides give Jill&#x27;s new book a frosty review</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:33%"></span><span class="seg r" style="width:67%"></span></div></span><span class="rowcount">3</span></a><a class="row" href="https://www.foxnews.com/us/karmelo-anthony-trial-ignites-rival-camps-threaten-get-jurors-heads-track-meet-stabbing-expert" target="_blank" rel="noopener" data-cov="3" data-lop="100" data-tilt="right" data-topics="protest"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Karmelo Anthony trial ignites rival camps that threaten to get in jurors’ heads in track meet stabbing: expert</span><span class="rowbar"><div class="bar mini"><span class="seg r" style="width:100%"></span></div></span><span class="rowcount">3</span></a><a class="row" href="https://www.theguardian.com/commentisfree/2026/jun/01/texas-democrat-primary-james-talarico-votes" target="_blank" rel="noopener" data-cov="2" data-lop="0" data-tilt="balanced" data-topics="government elections parties abortion"><span class="rowhead">If Democrats are to win Texas, James Talarico must win blue-collar voters | Dustin Guastella</span><span class="rowbar"><div class="bar mini"><span class="seg l" style="width:50%"></span><span class="seg r" style="width:50%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://www.newsweek.com/major-green-card-change-birthright-citizenship-case-12019988" target="_blank" rel="noopener" data-cov="2" data-lop="50" data-tilt="left" data-topics="government"><span class="rowhead"><span class="dot right" title="Blindspot"></span>Major Green Card Change Could Hit After Birthright Citizenship Case</span><span class="rowbar"><div class="bar mini"><span class="seg l" style="width:50%"></span><span class="seg c" style="width:50%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://news.google.com/rss/articles/CBMixgFBVV95cUxQT0ZFci1pWHE4TkZPeThzbi1aYW1kNkV5NnpTZnk3WEctME5pVFYtMEN4RGhVcHpiTVpnS25YcFhTYjFCejVCLXZfUDItX1lmTy1hWjhQUnJ2NXlBbzY1VDhCZHhKYUp2Qno0bUNCR0FkTWNpNHM4VTV6ZGtBLXNvdXFUYkotOHVtNzgxVHh3blNMNUExdjNldTZJbDQzQkdpU0JFU3ZhYnpiQVpYcXM1ZUloOEZwcTY1ckQxNEdzYlM0SG55TXc?oc=5" target="_blank" rel="noopener" data-cov="2" data-lop="50" data-tilt="left" data-topics="government"><span class="rowhead"><span class="dot right" title="Blindspot"></span>UN urges the world to ready for extreme heat risk from El Nino - Reuters</span><span class="rowbar"><div class="bar mini"><span class="seg l" style="width:50%"></span><span class="seg c" style="width:50%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://www.csmonitor.com/USA/Justice/2026/0531/As-Epstein-investigation-stalls-in-Congress-survivors-search-for-accountability?icid=rss" target="_blank" rel="noopener" data-cov="2" data-lop="50" data-tilt="left" data-topics="government"><span class="rowhead"><span class="dot right" title="Blindspot"></span>As Epstein investigation stalls in Congress, survivors search for accountability</span><span class="rowbar"><div class="bar mini"><span class="seg l" style="width:50%"></span><span class="seg c" style="width:50%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://www.cnbc.com/2026/06/02/trump-proposes-25-tariff-on-brazil.html" target="_blank" rel="noopener" data-cov="2" data-lop="0" data-tilt="balanced" data-topics="government policy"><span class="rowhead">Trump administration proposes 25% tariff on Brazilian goods over unfair trade practices</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:100%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://news.google.com/rss/articles/CBMiwwFBVV95cUxNQXZfUUhkY0l6Vml6TVJ2QU02R0dtWHpYYUFiWTJfQzQ3RTZTR1pfb3hDbTBKTm1lVVVBN2Vtc1J1c09KWWNxaVd6ZGFoSW0zZ0lBcEt5Nkd2Sl9vRjNtZVpMN0NVWUN4NlhLbjN6SWJUdDhjX195UF9ETW5MeUdqZVlPbXgzQXFfRl96d2NJVFVyQzdnVVJNeGViMFhXMUZWVFJaOXpJNnlVVG5raW0yUGs3aUxtNFpWbU9uc0hEbWUtT0E?oc=5" target="_blank" rel="noopener" data-cov="2" data-lop="50" data-tilt="right" data-topics="government"><span class="rowhead">Mexico&#x27;s Sheinbaum escalates rhetoric against US, blames far-right &#x27;offensive&#x27; - Reuters</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:50%"></span><span class="seg r" style="width:50%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxPT2NGcy1BQUFMZGd6aXdnbFZLdUo5cWJCaUZNQnBmLVc1NkpUQUExQy1LaXVqSkJxbXB0bjhERTdMdlBBX0NTZU1lSmFSSzhFMlI0Ym5OeTVIejNNUmZvYkowMDZia1F4U2lVeWgtNHBGampYUVYwamdHMG5MZ24tYlkxWnVTdWl0SUt6bERURXV6bFdSWHRxV01ldkpRczd5SzdDcE9rVV8?oc=5" target="_blank" rel="noopener" data-cov="2" data-lop="50" data-tilt="right" data-topics="government elections parties"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Colorado elections clerk released from prison after governor commutes sentence - AP News</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:50%"></span><span class="seg r" style="width:50%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://www.axios.com/local/tampa-bay/2026/06/01/florida-openai-ceo-sam-altman-chatgpt" target="_blank" rel="noopener" data-cov="2" data-lop="0" data-tilt="balanced" data-topics="government policy"><span class="rowhead">Florida sues OpenAI and CEO Sam Altman over ChatGPT</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:100%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://www.csmonitor.com/USA/Politics/2026/0601/california-governor-campaign-becerra-hilton-steyer?icid=rss" target="_blank" rel="noopener" data-cov="2" data-lop="0" data-tilt="balanced" data-topics="government elections parties"><span class="rowhead">In California, a tight race to govern a state with looming challenges</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:100%"></span></div></span><span class="rowcount">2</span></a><a class="row" href="https://www.newsweek.com/trump-admin-declares-june-title-ix-month-second-year-running-what-is-it-12020416" target="_blank" rel="noopener" data-cov="2" data-lop="50" data-tilt="right" data-topics="government protest"><span class="rowhead"><span class="dot left" title="Blindspot"></span>Trump Admin Declares June &amp;#039;Title IX Month&amp;#039; For Second Year Running—What Is It?</span><span class="rowbar"><div class="bar mini"><span class="seg c" style="width:50%"></span><span class="seg r" style="width:50%"></span></div></span><span class="rowcount">2</span></a></div></div><footer><b>These bias ratings are editorial, opinionated calls — not an authoritative source.</b> Each outlet is labeled in <code>sources.csv</code> and the labels are freely editable. Filtered to political coverage via editable buckets in <code>political_topics.txt</code> (scope: <b>loose</b>; flip with <code>--scope strict</code>). The bias bar shows the share of <em>outlets</em> covering a story by lean. A blindspot is a story one side covers heavily while the other barely touches it.</footer></div></body></html><script>
+(function(){
+  var state={lean:'all',topic:'all',sort:'cov'};
+  var feat=Array.prototype.slice.call(document.querySelectorAll('#featured .card'));
+  var rows=Array.prototype.slice.call(document.querySelectorAll('#morelist .row'));
+  var fg=document.getElementById('featured');
+  var ml=document.getElementById('morelist');
+  function match(el){
+    if(state.lean!=='all' && el.dataset.tilt!==state.lean) return false;
+    if(state.topic!=='all' && el.dataset.topics.split(' ').indexOf(state.topic)<0) return false;
+    return true;
+  }
+  function key(el){ return state.sort==='cov' ? +el.dataset.cov : +el.dataset.lop; }
+  function apply(){
+    var vis=feat.filter(match), hid=feat.filter(function(e){return !match(e);});
+    vis.sort(function(a,b){ return key(b)-key(a) || (+b.dataset.cov)-(+a.dataset.cov); });
+    vis.forEach(function(el,i){ el.style.display='';
+      el.classList.toggle('hero', i<2); el.classList.toggle('mid', i>=2); fg.appendChild(el); });
+    hid.forEach(function(el){ el.style.display='none'; });
+    document.getElementById('featempty').style.display = vis.length?'none':'block';
+
+    var vr=rows.filter(match), hr=rows.filter(function(e){return !match(e);});
+    vr.sort(function(a,b){ return key(b)-key(a) || (+b.dataset.cov)-(+a.dataset.cov); });
+    vr.forEach(function(el){ el.style.display=''; ml.appendChild(el); });
+    hr.forEach(function(el){ el.style.display='none'; });
+    var mw=document.getElementById('morewrap'); if(mw) mw.style.display = vr.length?'':'none';
+  }
+  function wire(group,field){
+    var btns=document.querySelectorAll('[data-group="'+group+'"]');
+    Array.prototype.forEach.call(btns,function(btn){
+      btn.addEventListener('click',function(){
+        Array.prototype.forEach.call(btns,function(b){ b.classList.remove('active'); });
+        btn.classList.add('active'); state[field]=btn.dataset.val; apply();
+      });
+    });
+  }
+  wire('lean','lean'); wire('topic','topic'); wire('sort','sort');
+  apply();
+})();
+</script>
