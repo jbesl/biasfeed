@@ -1,0 +1,42 @@
+name: Refresh BiasFeed
+
+# Rebuilds the page on a timer and (if anything changed) commits it back,
+# which GitHub Pages then republishes automatically.
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"   # every 3 hours, UTC (GitHub may delay it under load)
+  workflow_dispatch:         # adds a manual "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write            # lets the workflow commit the new index.html
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install feedparser
+
+      - name: Build the page
+        run: python groundclone.py --out index.html --max-age 2
+
+      - name: Commit if the news changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --staged --quiet; then
+            echo "No changes — nothing to commit."
+          else
+            git commit -m "Auto-refresh $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
